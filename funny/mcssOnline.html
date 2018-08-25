@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Mcss Online Parser</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="keywords" content="tree string,json-toy,Froguard">
+<meta name="description" content="Gen a tree string by json string">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="/css/funny.css">
+<link rel="stylesheet" href="/z_stable/thirdpart/codemirror/lib/codemirror.css">
+<script src="/z_stable/thirdpart/codemirror/lib/codemirror.js"></script>
+<script src="/z_stable/thirdpart/codemirror/mode/css/css.js"></script>
+<script src="/z_stable/thirdpart/codemirror/mode/stylus/stylus.js"></script>
+<script src="/js/baks/mcssonline/mcss-latest.min.js"></script>
+</head>
+<body class="m-funny">
+<h1>Mcss Online Parser</h1>
+<hr>
+<div class="g-con">
+    <!-- input -->
+    <div class="g-in-l">
+        <p class="u-options">
+            <span>More detail:&nbsp;&nbsp;&nbsp;</span>
+            <a href="https://github.com/leeluolee/mcss" target="_blank">mcss-github</a>&nbsp;&nbsp;
+            <a href="https://github.com/leeluolee/mass" target="_blank">mass-github</a>&nbsp;&nbsp;
+            <a href="https://froguard.github.io/2016/11/8/mcss快速指引/#locked-catalog" target="_blank">mcss语法</a>
+        </p>
+        <div class="m-frame">
+            <div style="margin:5px;overflow: hidden;">
+<textarea name="inputText" id="j-input">// type in here and gen css-code to right place →_→
+
+$brand-color = #da3412;
+
+$opacity = ($opt = 0){
+   filter:  alpha(opacity = round($opt * 100));
+   opacity: $opt;
+}
+
+.link{
+  color: $brand-color;
+  &amp;:hover{
+      color: l-adjust($brand-color, 5%);
+      $opacity: .9;
+  }
+  &amp;:active{
+      color: l-adjust($brand-color, -5%);
+      $opacity: 1;
+  }
+}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="g-in-i"><p id="j-trans-flag"></p></div>
+    <!-- output -->
+    <div class="g-in-r">
+        <p class="u-options">
+            <strong>Format:&nbsp;&nbsp;</strong>
+            <label for="j-style1" title="标准css"><input type="radio" name="format" id="j-style1" value="1" checked>&nbsp;常规</label>&nbsp;
+            <label for="j-style2" title="nec风格,一个选择器一行"><input type="radio" name="format" id="j-style2" value="3">&nbsp;Nec</label>&nbsp;
+            <label for="j-style3" title="全部压缩成一行"><input type="radio" name="format" id="j-style3" value="2">&nbsp;压缩</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>Indent:&nbsp;&nbsp;</strong>
+            <label for="j-indent1" title="2个space"><input type="radio" name="indent" id="j-indent1" value="  " checked>&nbsp;空格</label>&nbsp;
+            <label for="j-indent2" title="制表符\t"><input type="radio" name="indent" id="j-indent2" value="">&nbsp;<strong>\t</strong></label>&nbsp;
+        </p>
+        <div class="m-frame" style="background-color: #2B2B2B;">
+            <div style="margin:5px;overflow: hidden;">
+<textarea name="inputText" id="j-output">.link{
+  color:#da3412;
+}
+.link:hover{
+  color:#ec3d19;
+  filter:alpha(opacity = 90);
+  opacity:0.9;
+}
+.link:active{
+  color:#c22e10;
+  filter:alpha(opacity = 36);
+  opacity:0.358;
+}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/z_stable/thirdpart/codemirror/addon/selection/active-line.js"></script>
+<script src="/z_stable/thirdpart/codemirror/addon/edit/matchbrackets.js"></script>
+<script src="/z_stable/thirdpart/codemirror/addon/edit/closebrackets.js"></script>
+<script>
+    // let defaultStr = '// type in here and gen css-code to right place →_→';
+    let $input = document.querySelector('#j-input');
+    let $trans = document.querySelector('#j-trans-flag');
+    let $output = document.querySelector('#j-output');
+    function getQueryString(name) {
+        let reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i');
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURI(r[2]);
+        }
+        return null;
+    }
+    if(1 === parseInt(getQueryString('clear'))){//clear input and output
+        $input.value = $input.innerText = '// type in here and gen css-code to right place →_→\n';
+        $output.value = $input.innerText = '';
+    }
+    // init editor
+    let editor1 = window.CodeMirror.fromTextArea($input, {
+        styleActiveLine: true, // 高亮行
+        matchBrackets: true, // 高亮{}[]()
+        autoCloseBrackets: true, // 自动补全{}[]()
+        lineNumbers: true, // 行号
+        mode: 'stylus', // 语言类型
+        theme: 'dracula css-processor', // 主题
+        autofocus: true, // 自动聚焦
+        dragDrop: false, // 拖放
+        tabSize: 4, // tabSize=4space
+        extraKeys: {
+            'Ctrl-Space': 'autocomplete'// 自动补全
+        }
+    });
+    let editor2 = window.CodeMirror.fromTextArea($output, {
+        styleActiveLine: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        lineNumbers: true,
+        mode: 'css',
+        theme: 'dracula',
+        dragDrop: false,
+        tabSize: 4,
+        readOnly: true
+    });
+    editor2.state.activeLine = null;
+    // show error message
+    let WRAP_CLASS = 'CodeMirror-error';
+    let BACK_CLASS = 'CodeMirror-error-background';
+    function clearActiveLine(cm){
+        cm.removeLineClass(cm.state.activeLine, 'wrap', WRAP_CLASS);
+        cm.removeLineClass(cm.state.activeLine, 'background', BACK_CLASS);
+    }
+    function updateActiveLine(cm, errorLine){
+        if(errorLine-1<0){
+            return;
+        }
+        let line = cm.getLineHandle(errorLine -1)||{};
+        if(cm.state.activeLine) {
+            clearActiveLine(cm);
+        }
+        cm.addLineClass(line, 'wrap', WRAP_CLASS);
+        cm.addLineClass(line, 'background', BACK_CLASS);
+        cm.state.activeLine = line;
+    }
+    let mcssOptions = {
+        filename: '/mcss/index.html',
+        indent: '  ',
+        format: 1
+    };
+    // do parse
+    function _doParse(text){
+        if(text===undefined || text===null){
+            text = (editor1 && editor1.getValue()) || $input.value || '';
+        }else if(''===text){
+            text = '';
+        }
+        window.mcss(mcssOptions)
+        .translate(text)
+        .done((css) => {
+            editor2.setValue(css);
+            $trans.className = 'success';
+            $trans.innerText = '√';
+            if(editor1.state.activeLine){
+                clearActiveLine(editor1);
+            }
+        })
+        .fail((error) => {
+            $trans.className = 'fail';
+            $trans.innerText = '×';
+            editor2.setValue(`${error.name} : ${error.message}`);
+            updateActiveLine(editor1, parseInt(error && error.line));
+        });
+        setTimeout(() => {
+            $trans.className = '';
+            $trans.style.display = 'none';
+            $trans.innerText = '→';
+        }, 1000);
+    }
+    let _t;// throttle
+    function doParse(text){
+        !!_t && window.clearTimeout(_t);
+        _t = window.setTimeout(() => _doParse(text), 300);
+    }
+    // onchangeDeal
+    function onChange(e, text){
+        e = e || window.event || {};
+        // let ele = e.target || e.srcElement;
+        $trans.innerText = '→';
+        $trans.className = 'show';
+        $trans.style.display = 'block';
+        doParse(text);
+    }
+    // bind onChange
+    // $input.addEventListener("input",onChange,false);
+    let $editor1 = document.getElementsByClassName('CodeMirror')[0];
+    editor1.on('change', () => onChange({target: $editor1}, editor1.getValue()));
+    // 切换options时候触发解析
+    let $fmt1 = document.getElementById('j-style1');
+    let $fmt2 = document.getElementById('j-style2');
+    let $fmt3 = document.getElementById('j-style3');
+    let $idt1 = document.getElementById('j-indent1');
+    let $idt2 = document.getElementById('j-indent2');
+    function onOptionChange(e){
+        e = e || window.event || {};
+        let ele = e.target || e.srcElement;
+        let name = `${ele.name}`;
+        let value = ele.value,
+            numberValue = parseInt(value);
+        window.mcssOptions = window.mcssOptions || {};
+        window.mcssOptions[name] = numberValue===numberValue ? numberValue : value; // eslint-disable-line
+        doParse(editor1.getValue());
+    }
+    $fmt1.addEventListener('change', onOptionChange, false);
+    $fmt2.addEventListener('change', onOptionChange, false);
+    $fmt3.addEventListener('change', onOptionChange, false);
+    $idt1.addEventListener('change', onOptionChange, false);
+    $idt2.addEventListener('change', onOptionChange, false);
+
+</script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<ul name="访问量统计" style="display:none!important;"><li name="page_uv" unit="次" id="busuanzi_value_page_pv">0</li><li name="site_pv" unit="次" id="busuanzi_value_site_pv">0</li></ul>
+</body>
+</html>
