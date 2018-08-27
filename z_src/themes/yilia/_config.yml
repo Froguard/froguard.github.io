@@ -1,0 +1,91 @@
+# Header
+
+menu:
+  主页: /
+  笔记: /categories/note
+
+# SubNav
+subnav:
+  github: "https://github.com/Froguard"
+  mail: "mailto:figure_wf@163.com"
+  npm: "https://www.npmjs.com/~froguard"
+  #weibo: "#"
+  #rss: "#"
+  #zhihu: "#"
+  #douban: "#"
+  #facebook: "#"
+  #google: "#"
+  #twitter: "#"
+  #linkedin: "#"
+
+#rss: /atom.xml
+
+# 是否需要修改 root 路径
+# 如果您的网站存放在子目录中，例如 http://yoursite.com/blog，
+# 请将您的 url 设为 http://yoursite.com/blog 并把 root 设为 /blog/。
+root:
+
+# Content
+excerpt_link: more      # 阅读全文，更多
+fancybox: true          # 弹出层效果
+mathjax: true           # 数学表达式,全局开启,可在具体post中设置 mathjax: false 进行关闭
+
+# 是否需要go2top
+go2top: false
+# 是否需要文章内容目录索引导航,全局开启,可在具体post中设置 catalog: false 进行关闭
+catalog: true # 在具体的文章中设定 catalog: "locked" 则可以让其默认锁定
+
+# 是否开启动画效果
+animate: true
+
+
+# 是否在新窗口打开链接
+open_in_new: true  #markdown不可以实现带有target="_blank"的a标签
+
+# Miscellaneous
+google_analytics: ''
+favicon: /favicon.ico
+
+#你的头像url
+avatar: https://avatars2.githubusercontent.com/u/4298621?v=3&s=460
+
+#是否开启分享
+# 分享插件一:share_jia
+share_jia: false
+share_addthis: false
+# 分享插件二:bShare
+bShare: false
+# 分享插件三:baidu_share(相对靠谱一点,这个改造过,已经支持https了,虽然是变相支持)
+baidu_share: true
+
+#是否开启多说评论，填写你在多说申请的项目名称 duoshuo: duoshuo-key
+#例如我的是froguard.duoshuo.com这个二级域名,对应doushuo-key则为 froguard
+duoshuo: froguard
+
+#若使用disqus，请在博客config文件中填写disqus_shortname，并关闭多说评论
+
+# 首页展示的menu
+# 如不需要，将该项置为false
+# 比如
+# smart_menu:
+#   friends: false
+smart_menu:
+  innerArchive: '文章'
+  tagcloud: '标签'
+  friends: '工具' # 这里友链换成'工具'
+  aboutme: '个人'
+
+# 友链 -> 这里友链换成'工具'
+friends:
+  树状字符在线生成器: https://froguard.github.io/funny/treeString.html
+  Mcss在线解析器: https://froguard.github.io/funny/mcssOnline.html
+  #友情链接2: http://localhost:4000/
+  #友情链接3: http://localhost:4000/
+
+aboutme: <p>←_←&nbsp;A poor doge...&nbsp;&nbsp;</p>
+         <ul>
+           <li><a href="https://github.com/Froguard">&nbsp;Github&nbsp;</a></li>
+           <li><a href="https://www.npmjs.com/~froguard">&nbsp;NPM&nbsp;</a></li>
+           <li><a href="mailto:figure_wf@163.com">&nbsp;Email&nbsp;</a></li>
+         </ul>
+

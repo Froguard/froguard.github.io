@@ -1,0 +1,8 @@
+.idea/
+.deploy*/
+public/
+db.json
+*.log
+node_modules/
+**/node_modules/
+themes/**/LICENSE

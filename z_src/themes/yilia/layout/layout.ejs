@@ -1,0 +1,40 @@
+<%- partial('_partial/head') %>
+<body>
+  <div id="container">
+    <div class="left-col">
+      <%- partial('_partial/left-col', null, {cache: !config.relative_link}) %>
+    </div>
+    <div class="mid-col">
+      <%- partial('_partial/mobile-nav', null, {cache: !config.relative_link}) %>
+      <div class="body-wrap">
+        <%- body %>
+      </div>
+      <%- partial('_partial/footer') %>
+    </div>
+    <%- partial('_partial/after-footer') %>
+    <%- partial('_partial/tools') %>
+    <%- partial('_partial/viewer') %>
+  </div>
+  <!-- 蛛网 -->
+  <script async src="/js/anibg/cobwebs.min.js"></script><%/* http://michaelxiang.me/js/src/particle.js */%>
+  <!-- 不蒜子:统计 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <ul name="访问量统计" style="display:none!important;">
+    <li name="page_uv" unit="次" id="busuanzi_value_page_pv">0</li>
+    <li name="site_pv" unit="次" id="busuanzi_value_site_pv">0</li>
+    <%/*<li name="site_uv" unit="人" id="busuanzi_value_site_uv">0</li>*/%>
+  </ul>
+  <%/* 主动推送到百度收录 */%>
+<!--
+目前的百度站长主推，不支持https，先注掉吧
+<script async src="http://push.zhanzhang.baidu.com/push.js"></script>
+-->
+<!--
+Establish-info:
+     since : 2014-06-30
+    author : @froguard
+  lastPush : <%- time(Date.now(), 'YYYY-MM-DD HH:mm:ss') %>
+-->
+
+</body>
+</html>

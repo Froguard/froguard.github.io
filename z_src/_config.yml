@@ -1,0 +1,140 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: Froguard                            # 网站标题
+subtitle: A foolish,lazy and wild doge...  # 网站副标题
+description: 给我刊~腻右的忏屁！              # 网站描述
+author: froguard                           # 作者
+language: zh-CN                            # 语言
+timezone: Asia/Shanghai                    # 时区
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://froguard.github.io                     # 网址
+root: /                                            # 网站根目录
+permalink: /:category/:year/:month/:title.html     # 链接地址格式
+# :year/:i_month/:i_day/:title/
+# :year/:i_month/:title/          2016/11/文章名字
+permalink_defaults:
+
+# Directory
+source_dir: source                         # 源目录
+public_dir: public                         # 主目录
+tag_dir: tags                              # 标签
+archive_dir: archives                      # 归档
+category_dir: categories                   # 分类
+code_dir: downloads/code                   # 下载的代码目录
+i18n_dir: :lang                            # 国际化
+skip_render:                               # 跳过指定文件的渲染，可使用 glob 表达式来匹配路径
+  - 'source/funny/**'
+  - 'source/static/**'
+  - 'source/**/README.md'
+  - 'source/**/readme.md'
+  - 'source/**/*.html'
+  - 'source/**/*.htm'
+  - 'source/**/*.txt'
+
+# Writing
+# 按照月份进行分文件夹存放新创建的markdown文件,其中i_month表示个位数去掉前面的0,比如 09 -> 9
+new_post_name: :year/:i_month/:title.md    # 新建文章时候的命名格式 :title.md
+default_layout: post                       # 默认的文章布局，对应scaffold/的文件
+titlecase: false                           # 把标题转换为 title case（比如首字母大写）
+external_link: true                        # 在文章中的链接，打开方式一新窗口打开
+filename_case: 0                           # 文件名转换为：1小写，2大写
+render_drafts: false                       # 是否渲染处理草稿
+post_asset_folder: fasle                   # 是否将静态资源保存在与文章同名的文件夹中
+relative_link: false                       # 把链接改为与根目录的相对位址
+future: true                               # 显示未来的文章
+highlight:                                 # 代码块高亮
+  enable: true                             # 开启
+  line_number: true                        # 行号
+  auto_detect: false                       # 自动检查，开启会拖慢速度，建议关闭
+  tab_replace:                             #
+
+# Category & Tag
+# 原则说明: Category 分类,用来粗略描述大类别,一篇文章分类不超过两个
+#         Tag 标签,用来精确描述小的类别,一篇文章标签不超过三个
+default_category: other                    # 默认分类
+category_map:                              # 分类别名,这样就可以在post文章中书写中文标签,但是路径会生成对应的英文
+  编程: program
+  开发: program
+  学习: note
+  笔记: note
+  学习笔记: note
+  源码学习: note
+  工具: tool
+  其他: other
+  产品: product
+  设计: design
+  设计师: design
+  学设计: design
+  给设计师: design
+  写给设计师: design
+  前端: f2e
+  后端: backend
+  数据库: database
+
+
+# default_tag: notag
+tag_map:                                   # 标签别名
+  样式: css
+  脚本: js
+  安卓: android
+  算法: algorithm
+  集锦: gist
+  代码段: gist
+  代码收集: gist
+  人工智能: AI
+  机器学习: machinelearning
+  深度学习: depthlearning
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date,You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+
+# Pagination
+per_page: 8                                # 每页显示数，设置为零表示不分页
+pagination_dir: page                       # 分页目录
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: yilia                               # 主题名，对应themes/文件夹之下的同名文件夹
+exclude_generator:                         # 需要忽略的
+  - hexo-generator-feed
+
+# Markdown
+## https://github.com/chjj/marked
+markdown:
+gfm: true
+pedantic: false
+sanitize: false
+tables: true
+breaks: false
+smartLists: true
+smartypants: true
+
+# Stylus
+#stylus:
+#compress: false
+
+# RSS
+feed: false
+#feed:	#之后配置rss会用，使用如下配置即可
+#  type: atom      # feed类型
+#  path: atom.xml  # ree路径
+#  limit: 15       # 在rss中最多生成多少条文章数，0表示所有
+
+# Deployment
+## Docs: https://hexo.io/docs/deployment.html
+deploy:
+  type: git
+  repository: https://github.com/Froguard/froguard.github.io.git #git@github.com:Froguard/froguard.github.io.git
+  branch: master
+  message: Updated @ {{now("YYYY-MM-DD HH:mm:ss")}}
+  user: froguard
+  email: figure_wf@163.com

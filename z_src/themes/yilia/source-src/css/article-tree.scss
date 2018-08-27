@@ -1,0 +1,82 @@
+.article-entry{
+  $linkCharColor : #ccc;
+  $itH : 26px;
+  $ft : 14px;
+  ul, ol{
+    font-size: $ft;
+    margin: 0;
+    li{
+      min-height: $itH;
+      line-height: $itH;
+      &:before{
+        width: auto;
+        height: $itH;
+        line-height: $itH;
+        font-size: $itH;
+        color: $linkCharColor;
+        font-weight: normal;
+        text-align: left;
+        content: "";
+        display: inline-block;
+        float: left;
+        background: transparent;
+        border: none;
+        margin: 0 8px 0 0;
+        border-radius: 0;
+      }
+    }
+  }
+  li{
+    //末尾节点 & 唯一节点
+    ul,ol{
+      margin-left: 24px;
+      >li{//非第一层
+        &:before{// ├
+          content: "-";
+          background-color: transparent;
+          border-left: 3px solid $linkCharColor;
+          text-indent: -1px;
+          letter-spacing: -1px;
+        }
+        &:last-child:before{// └
+          height: $itH / 2;
+          line-height: 18px;
+        }
+        >ul,>ol{
+          margin-left: 0;
+          border-left: 3px solid $linkCharColor;
+          padding-left: 25px;
+        }
+        &:last-child,
+        &:only-child{
+          ul,ol{
+            border-left: 3px solid transparent;
+          }
+        }
+      }
+    }
+  }
+  //第一层节点
+  >ul,>ol{
+    >li{
+      &:before{//小圆点
+        content: "";
+        width: 6px;
+        height: 6px;
+        border: 1px solid #999;
+        background: #fefefe;
+        border-radius: 10px;
+        margin-right: 10px;
+        margin-top: 10px;
+      }
+      //&:last-child,
+      //&:only-child{
+      //  &:before{
+      //    border: 1px solid #999;
+      //    background: #aaa;
+      //  }
+      //}
+    }
+  }
+
+}

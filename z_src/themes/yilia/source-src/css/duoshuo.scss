@@ -1,0 +1,36 @@
+/* 多说评论,share+分享,bShare分享, 百度分享 */
+.duoshuo, .share_jia, .bshare-custom,.bdsharebuttonbox {
+	padding: 0 40px;
+	min-height: 20px;
+}
+/* bShare微信分享框 */
+#bsWXBox,#bsWXBox * {
+  box-sizing: content-box!important;
+}
+/* share+分享 */
+.jiathis_txt {
+	float: left;
+	font-size: 12px;
+	text-decoration: none;
+	line-height: 18px!important;
+}
+/*多说喜欢按钮*/
+.duoshuo #ds-thread #ds-reset a.ds-like-thread-button{
+  background-color: #e9e9e9;
+  background-image: none;
+  box-shadow: none;
+  text-shadow: none;
+  border: 1px solid #ccc;
+}
+.duoshuo .ds-powered-by{
+  visibility: hidden;
+  color: transparent;
+  opacity: 0;
+}
+#ds-smilies-tooltip ul.ds-smilies-tabs{
+  max-height: 140px!important;
+}
+/*百度分享各个按钮*/
+.bdsharebuttonbox > a{
+  border-radius: 3px;
+}

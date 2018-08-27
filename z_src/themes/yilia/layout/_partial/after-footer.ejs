@@ -1,0 +1,30 @@
+<script>
+var yiliaConfig = {
+  animate: <%= theme.animate %>,
+  open_in_new: <%= theme.open_in_new %>,
+  innerArchive: <%= theme.smart_menu.innerArchive ? true : false %>,
+  go2top: <%= theme.go2top %>,
+  catalog: <%= theme.catalog%>,
+  fancybox: <%= theme.fancybox %>,
+  mathjax: <%= theme.mathjax %>,
+  page: {
+    isHome: <%= is_home() %>,
+    isPost: <%= is_post() %>,
+    isArchive: <%= is_archive() %>,
+    isTag: <%= is_tag() %>,
+    isCategory: <%= is_category() %>,
+    isYear: <%= is_year() %>,
+    isMonth: <%= is_month() %>
+  }<% if (is_post()) { %>,
+  post:{
+    openShare: <%= (page.share==undefined ? true : page.share)%>,
+    openMathJax: <%= (page.mathjax==undefined ? false : (!!page.mathjax))%>,
+    openCatalog: <%if (page.catalog==undefined){%>theme.catalog<% } else { %>"<%= page.catalog%>"<%}%>,
+    openComments: <%= (page.comments==undefined ? true : page.comments)%>,
+    lastModify : "<%= time(page.updated, 'YYYY-MM-DD hh:mm:ss a') %>"
+  }<% } %>
+};
+</script>
+<%- js('/js/main.min') %>
+<%/* 数学公式插件 */%>
+<% if (theme.mathjax && page.mathjax){ %><%- partial('mathjax') %><% } %>

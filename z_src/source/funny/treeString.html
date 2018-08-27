@@ -1,0 +1,231 @@
+﻿---
+layout: false
+title: "Get tree string"
+---
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Get Tree String</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="keywords" content="tree string,json-toy,Froguard"/>
+<meta name="description" content="Gen a tree string by json string"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="/css/funny.css">
+<link rel="stylesheet" href="/z_stable/thirdpart/codemirror/lib/codemirror.css">
+<script src="/z_stable/thirdpart/codemirror/lib/codemirror.js"></script>
+</head>
+<body class="m-funny">
+<h1>Gen tree string by json</h1>
+<hr>
+<div class="g-con">
+<div class="g-in-l">
+<p class="u-options">
+<span>More detail:&nbsp;&nbsp;&nbsp;</span>
+<a href="https://www.npmjs.com/package/json-toy">NPM</a>&nbsp;&nbsp;
+<a href="https://github.com/Froguard/json-toy">Github</a>
+</p>
+<div class="m-frame"><div style="margin:5px;overflow: hidden;">
+<textarea name="inputJsonText" id="j-in-json">{
+  "name": "json-toy",
+  "dependencies": {},
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
+    "rewire": "^2.5.2",
+    "should": "^11.1.1"
+  },
+  "size": 8 ,
+  "main": "index.js",
+  "bin": {
+    "jts": "bin/j-tree-str.js"
+  },
+  "scripts": {
+    "test": "mocha --harmony"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Froguard/json-toy.git"
+  },
+  "engines": {
+    "node": ">= 4.0",
+    "npm": ">= 2"
+  },
+  "keywords": [
+    "travel",
+    "keyPath",
+    "tree string"
+  ],
+  "bugs": {
+    "url": "https://github.com/Froguard/json-toy/issues"
+  }
+}</textarea></div></div></div>
+<div class="g-in-i"><p id="j-trans-flag"></p></div>
+<!-- output -->
+<div class="g-in-r">
+<p class="u-options">
+<label>space(h):&nbsp;<input name="option.space" min="0" max="8" value="3" type="number" id="j-space-x"></label>&nbsp;&nbsp;&nbsp;
+<label>space(v):&nbsp;<input name="option.spaceV" min="0" max="2" value="1" type="number" id="j-space-y"></label>&nbsp;&nbsp;&nbsp;
+<label>rootName:&nbsp;<input name="option.rootName" value="ROOT" type="text" id="j-root-name"></label>&nbsp;&nbsp;&nbsp;
+<label><input type="checkbox" name="option.valueOut" checked  id="j-chk-output">&nbsp;&nbsp;show property value?</label>
+</p>
+<div class="m-frame" style="max-height:766px;max-width:100%;overflow:auto;background-color:#333;">
+<xmp class="u-output" title="click to select all" id="j-out-tree"></xmp></div>
+</div>
+</div>
+<!-- init highlight code editor -->
+<script src="/z_stable/thirdpart/codemirror/mode/javascript/javascript.js"></script>
+<script src="/z_stable/thirdpart/codemirror/addon/selection/active-line.js"></script>
+<script src="/z_stable/thirdpart/codemirror/addon/edit/matchbrackets.js"></script>
+<script src="/z_stable/thirdpart/codemirror/addon/edit/closebrackets.js"></script>
+<script src="https://unpkg.com/json-toy@1.0.15/dist/jsonToy.min.js"></script>
+<!--<script src="/js/baks/jsontoy/jsonToy.min.js"></script>-->
+<script>
+let $input = document.querySelector('#j-in-json');
+let $trans = document.querySelector('#j-trans-flag');
+let $output = document.querySelector('#j-out-tree');
+let $sx = document.querySelector('#j-space-x');
+let $sy = document.querySelector('#j-space-y');
+let $rootName = document.querySelector('#j-root-name');
+let $outV = document.querySelector('#j-chk-output');
+// init editor
+let editor = window.CodeMirror.fromTextArea($input, {
+    styleActiveLine: true, //高亮行
+    matchBrackets: true, //高亮{}[]()
+    autoCloseBrackets: true, //自动补全{}[]()
+    lineNumbers: true, //行号
+    mode: 'javascript', //语言类型
+    theme: 'dracula json', //主题
+    autofocus: true, //自动聚焦
+    dragDrop: false, //拖放
+    tabSize: 2 //tabSize=2space
+});
+
+// show error message
+let WRAP_CLASS = 'CodeMirror-error';
+let BACK_CLASS = 'CodeMirror-error-background';
+function clearActiveLine(cm) {
+    cm.removeLineClass(cm.state.activeLine, 'wrap', WRAP_CLASS);
+    cm.removeLineClass(cm.state.activeLine, 'background', BACK_CLASS);
+}
+function updateActiveLine(cm, errorLine) {
+    if(errorLine-1<0){
+return;
+}
+    let line = cm.getLineHandle(errorLine -1)||{};
+    if(cm.state.activeLine) {
+clearActiveLine(cm);
+}
+    cm.addLineClass(line, 'wrap', WRAP_CLASS);
+    cm.addLineClass(line, 'background', BACK_CLASS);
+    cm.state.activeLine = line;
+}
+
+// parse main
+function _doTreeify(text){
+    text = text || (editor && editor.getValue()) || $input.value || 'input text is empty!';
+    let inJson, errorMsg;
+    try{
+        inJson = JSON.parse(text);
+    }catch(err){
+        try{
+            inJson = (new Function(`return ${text}`))();
+        }catch(err2){
+            errorMsg = `${err.toString()}\r\n${err2.toString()}` || '';
+            let hasNum = errorMsg.match(/(\d+)/g),
+                num = -1;
+            if(hasNum){
+                num = text.substring(0, parseInt(hasNum[0])).split('\n').length;
+                hasNum = `Error occur at line ${num} !\r\nDetail:\r\n`;
+            }else{
+                hasNum = '';
+                num = -1;
+            }
+            errorMsg = hasNum + errorMsg;
+            editor && updateActiveLine && updateActiveLine(editor, num);
+            console.warn(errorMsg);
+            inJson = false;
+        }
+    }
+    if (inJson) {
+        $output.className='u-output';
+        $output.innerText = window.jsonToy.treeString(inJson, {
+             rootName: $rootName.value || '',
+             valueOut: $outV.checked,
+             space: parseInt($sx.value) || 0,
+             vSpace: parseInt($sy.value) || 0
+        });
+        $trans.className = 'success';
+        $trans.innerText = '√';
+        editor && clearActiveLine && clearActiveLine(editor);
+    } else {
+        $output.innerText = errorMsg;
+        $output.className = 'u-output error';
+        $trans.className = 'fail';
+        $trans.innerText = '×';
+    }
+    setTimeout(() => {
+        $trans.className = '';
+        $trans.style.display = 'none';
+        $trans.innerText = '→';
+    }, 1000);
+}
+let _t;
+function doTreeify(text){
+    !!_t && window.clearTimeout(_t);
+    _t = window.setTimeout(() => {
+        _doTreeify(text);
+    }, 300);
+}
+
+// onChange deal
+function onChange(e, text){
+    e = e || window.event || {};
+    let ele = e.target || e.srcElement;// eslint-disable-line
+    $trans.innerText = '→';
+    $trans.className = 'show';
+    $trans.style.display = 'block';
+    doTreeify(text);
+}
+
+// do parse at once
+doTreeify($input.value);
+
+// bind value onchange
+let $editor = document.getElementsByClassName('CodeMirror')[0];
+editor.on('change', (cm) => {
+    onChange({target: $editor}, editor.getValue());
+});
+// bind options onchange
+$sx.addEventListener('input', onChange, false);
+$sy.addEventListener('input', onChange, false);
+$rootName.addEventListener('input', onChange, false);
+$input.addEventListener('input', onChange, false);
+$outV.addEventListener('change', onChange, false);
+
+// click to select result, for copy
+let _st;
+function selectOutput(){
+    !!_st && window.clearTimeout(_st);
+    _st = window.setTimeout(() => {
+        let range;
+        if (document.selection) {
+            range = document.body.createTextRange();
+            range.moveToElementText($output);
+            range.select();
+        } else if (window.getSelection) {
+            range = document.createRange();
+            range.selectNode($output);
+            window.getSelection().addRange(range);
+        }
+    }, 50);
+}
+$output.addEventListener('click', selectOutput, false);
+$output.addEventListener('focus', selectOutput, false);
+</script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<ul name="访问量统计" style="display:none!important;"><li name="page_uv" unit="次" id="busuanzi_value_page_pv">0</li><li name="site_pv" unit="次" id="busuanzi_value_site_pv">0</li></ul>
+</body>
+</html>

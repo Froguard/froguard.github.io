@@ -1,0 +1,15 @@
+z_res目录说明
+
+1. 这一层目录下的所有资源将会同步到themes/%currentTheme%/
+
+z_res/**/* => themes/%currentTheme%/**/*
+
+2. themes/%currentTheme%/source/**/*的文件将会映射到网站根目录下
+
+eg:
+
+若要使用   source/images/corrent.png,
+
+则可以采用 https://raw.githubusercontent.com/Froguard/froguard.github.io/master/images/correct.png 的方式,
+
+即: source/**/* => xxx.github.io/%branchName%/**/*

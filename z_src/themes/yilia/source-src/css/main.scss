@@ -1,0 +1,30 @@
+// main style
+@import "./global";
+@import "./fonts";
+@import "./grid";
+@import "./left";
+@import "./scroll";
+//@import "./highlight";               //dark code style
+@import "./highlight-github";          //github light code style
+@import "./tags";
+@import "./tags-cloud";
+@import "./social";
+@import "./page";
+@import "./archive-inner";
+@import "./archive";
+@import "./tools";
+@import "./switch";
+@import "./article-main";
+@import "./article-inner";
+@import "./article-nav";
+@import "./article-tree";
+@import "./duoshuo";
+@import "./footer";
+@import "./sidebar-right";
+@import "./sidebar-right-catalog";      //文章导航目录
+@import "./sidebar-right-go2top";       //回到顶部
+@media screen and (max-width: 800px) {  //适配移动端
+  @import "./mobile";
+  @import "./mobile-slider";
+}
+

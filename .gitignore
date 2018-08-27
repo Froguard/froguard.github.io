@@ -1,0 +1,21 @@
+# 通配
+.idea/
+.DS_Store
+Thumbs.db
+node_modules/
+*.log
+
+# 当前根目录： 加上/前缀只忽略当前目录下的这几个目录
+/201*/
+/archives/
+/css/
+/images/
+/js/
+/vendors/
+/index.html
+/favicon.ico
+
+# z_src
+/z_src/.idae/
+/z_src/public/
+/z_src/.deploy*/

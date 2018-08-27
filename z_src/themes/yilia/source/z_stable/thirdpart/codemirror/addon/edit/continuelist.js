@@ -1,0 +1,6 @@
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+!function(mod){"object"==typeof exports&&"object"==typeof module?// CommonJS
+mod(require("../../lib/codemirror")):"function"==typeof define&&define.amd?// AMD
+define(["../../lib/codemirror"],mod):// Plain browser env
+mod(CodeMirror)}(function(CodeMirror){"use strict";var listRE=/^(\s*)(>[> ]*|- \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/,emptyListRE=/^(\s*)(>[> ]*|- \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/,unorderedListRE=/[*+-]\s/;CodeMirror.commands.newlineAndIndentContinueMarkdownList=function(cm){if(cm.getOption("disableInput"))return CodeMirror.Pass;for(var ranges=cm.listSelections(),replacements=[],i=0;i<ranges.length;i++){var pos=ranges[i].head,eolState=cm.getStateAfter(pos.line),inList=!1!==eolState.list,inQuote=0!==eolState.quote,line=cm.getLine(pos.line),match=listRE.exec(line);if(!ranges[i].empty()||!inList&&!inQuote||!match)return void cm.execCommand("newlineAndIndent");if(emptyListRE.test(line))cm.replaceRange("",{line:pos.line,ch:0},{line:pos.line,ch:pos.ch+1}),replacements[i]="\n";else{var indent=match[1],after=match[5],bullet=unorderedListRE.test(match[2])||match[2].indexOf(">")>=0?match[2].replace("x"," "):parseInt(match[3],10)+1+match[4];replacements[i]="\n"+indent+bullet+after}}cm.replaceSelections(replacements)}});
