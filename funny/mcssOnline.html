@@ -214,9 +214,9 @@ $opacity = ($opt = 0){
         let name = `${ele.name}`;
         let value = ele.value,
             numberValue = parseInt(value);
-        window.mcssOptions = window.mcssOptions || {};
-        window.mcssOptions[name] = numberValue===numberValue ? numberValue : value; // eslint-disable-line
-        console.log(window.mcssOptions);
+        mcssOptions = mcssOptions || {};
+        mcssOptions[name] = numberValue===numberValue ? numberValue : value; // eslint-disable-line
+        // console.log(mcssOptions);
         doParse(editor1.getValue());
     }
     $fmt1.addEventListener('change', onOptionChange, false);
