@@ -163,31 +163,31 @@ $opacity = ($opt = 0){
             text = '';
         }
         window.mcss(mcssOptions)
-        .translate(text)
-        .done((css) => {
-            editor2.setValue(css);
-            $trans.className = 'success';
-            $trans.innerText = '√';
-            if(editor1.state.activeLine){
-                clearActiveLine(editor1);
-            }
-        })
-        .fail((error) => {
-            $trans.className = 'fail';
-            $trans.innerText = '×';
-            editor2.setValue(`${error.name} : ${error.message}`);
-            updateActiveLine(editor1, parseInt(error && error.line));
-        });
-        setTimeout(() => {
-            $trans.className = '';
-            $trans.style.display = 'none';
-            $trans.innerText = '→';
-        }, 1000);
+            .translate(text)
+            .done((css) => {
+                editor2.setValue(css);
+                $trans.className = 'success';
+                $trans.innerText = '√';
+                if(editor1.state.activeLine){
+                    clearActiveLine(editor1);
+                }
+            })
+            .fail((error) => {
+                $trans.className = 'fail';
+                $trans.innerText = '×';
+                editor2.setValue(`${error.name} : ${error.message}`);
+                updateActiveLine(editor1, parseInt(error && error.line));
+            });
+            setTimeout(() => {
+                $trans.className = '';
+                $trans.style.display = 'none';
+                $trans.innerText = '→';
+            }, 1000);
     }
     let _t;// throttle
     function doParse(text){
         !!_t && window.clearTimeout(_t);
-        _t = window.setTimeout(() => _doParse(text), 300);
+        _t = window.setTimeout(() => _doParse(text), 200);
     }
     // onchangeDeal
     function onChange(e, text){
@@ -216,6 +216,7 @@ $opacity = ($opt = 0){
             numberValue = parseInt(value);
         window.mcssOptions = window.mcssOptions || {};
         window.mcssOptions[name] = numberValue===numberValue ? numberValue : value; // eslint-disable-line
+        console.log(window.mcssOptions);
         doParse(editor1.getValue());
     }
     $fmt1.addEventListener('change', onOptionChange, false);
@@ -225,7 +226,7 @@ $opacity = ($opt = 0){
     $idt2.addEventListener('change', onOptionChange, false);
 
 </script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<ul name="访问量统计" style="display:none!important;"><li name="page_uv" unit="次" id="busuanzi_value_page_pv">0</li><li name="site_pv" unit="次" id="busuanzi_value_site_pv">0</li></ul>
+<!--<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+<!--<ul name="访问量统计" style="display:none!important;"><li name="page_uv" unit="次" id="busuanzi_value_page_pv">0</li><li name="site_pv" unit="次" id="busuanzi_value_site_pv">0</li></ul>-->
 </body>
 </html>
